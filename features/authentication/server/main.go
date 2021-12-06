@@ -16,8 +16,7 @@
  *
  */
 
-// The server demonstrates how to consume and validate OAuth2 tokens provided by
-// clients for each RPC.
+// The server demonstrates how to consume and validate OAuth2 tokens provided by clients for each RPC.
 package main
 
 import (
@@ -54,10 +53,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to load key pair: %s", err)
 	}
+
 	opts := []grpc.ServerOption{
-		// The following grpc.ServerOption adds an interceptor for all unary
-		// RPCs. To configure an interceptor for streaming RPCs, see:
-		// https://godoc.org/google.golang.org/grpc#StreamInterceptor
+		// The following grpc.ServerOption adds an interceptor for all unary RPCs. To configure an interceptor for streaming RPCs,
+		// see: https://godoc.org/google.golang.org/grpc#StreamInterceptor
 		grpc.UnaryInterceptor(ensureValidToken),
 		// Enable TLS for all incoming connections.
 		grpc.Creds(credentials.NewServerTLSFromCert(&cert)),
@@ -68,6 +67,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
+
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
@@ -97,6 +97,7 @@ func valid(authorization []string) bool {
 // the token is missing or invalid, the interceptor blocks execution of the
 // handler and returns an error. Otherwise, the interceptor invokes the unary
 // handler.
+// type UnaryServerInterceptor func(ctx context.Context, req interface{}, info *UnaryServerInfo, handler UnaryHandler) (resp interface{}, err error)
 func ensureValidToken(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
